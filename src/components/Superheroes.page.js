@@ -1,11 +1,31 @@
-import React from 'react'
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import "../App.css"
+
 
 const Superheroes = () => {
-  return (
-    <div>
-      Superheroes
-    </div>
-  )
-}
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState([]);
 
-export default Superheroes
+  useEffect(() => {
+    axios.get(" http://localhost:4000/superheroes").then((res) => {
+      setData(res.data);
+      setIsLoading(false);
+    });
+  }, []);
+
+  if (isLoading) {
+    return <h2>Loading</h2>;
+  }
+
+  return (
+    <div className="App">
+      <h2>Superhero Page</h2>
+      {data.map((hero) => {
+        return <div key={hero.name}>{hero.name}</div>;
+      })}
+    </div>
+  );
+};
+
+export default React.memo(Superheroes);
